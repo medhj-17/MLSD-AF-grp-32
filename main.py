@@ -1,7 +1,7 @@
 from sklearn.datasets import fetch_20newsgroups
 from sklearn.metrics.cluster import normalized_mutual_info_score, adjusted_rand_score
 from sentence_transformers import SentenceTransformer
-
+from umap import UMAP
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
@@ -27,7 +27,7 @@ def dim_red(mat, p, method):
         
         
     elif method=='UMAP':
-        umap_model = UMAP(n_components=n_components, random_state=42)
+        umap_model = UMAP(n_components=p, random_state=42)
         red_mat = umap_model.fit_transform(embeddings)
 
     elif method=='TSNE':
