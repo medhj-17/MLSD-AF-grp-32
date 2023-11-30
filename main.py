@@ -4,7 +4,6 @@ from sentence_transformers import SentenceTransformer
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from sklearn.cluster import KMeans
-import numpy as np
 
 
 def dim_red(mat, p, method):
@@ -20,8 +19,10 @@ def dim_red(mat, p, method):
         red_mat : NxP list such that p<<m
     '''
     if method=='ACP':
-        red_mat = mat[:,:p]
-        
+        # Apply PCA for dimensionality reduction
+        pca = PCA(n_components=p)
+        red_mat = pca.fit_transform(mat)
+       
     elif method=='AFC':
         red_mat = mat[:,:p]
         
@@ -33,7 +34,6 @@ def dim_red(mat, p, method):
         red_mat = tsne.fit_transform(mat)
     else:
         raise Exception("Please select one of the four methods : APC, AFC, UMAP, TSNE")
-    
     return red_mat
 
 
@@ -83,4 +83,4 @@ for method in methods:
     ari_score = adjusted_rand_score(pred, labels)
     # Print results
     print(f'Method: {method}\nNMI: {nmi_score:.2f} \nARI: {ari_score:.2f}\n')
-    
+
