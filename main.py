@@ -5,7 +5,6 @@ from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from sklearn.cluster import KMeans
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 def dim_red(mat, p, method):
@@ -32,7 +31,6 @@ def dim_red(mat, p, method):
     elif method=='TSNE':
         tsne = TSNE(n_components=p)
         red_mat = tsne.fit_transform(mat)
-        red_mat = mat[:,:p]
     else:
         raise Exception("Please select one of the four methods : APC, AFC, UMAP, TSNE")
     
@@ -58,22 +56,6 @@ def clust(mat, k):
     
     return pred
 
-def plot(labels,red_emb,method):
-    if method=='TSNE':
-       tsne_df = pd.DataFrame(data=red_emb, columns=['Component 1', 'Component 2', 'Component 3'])
-       tsne_df['Labels'] = labels
-
-       # Plotting in 3D
-       fig = plt.figure(figsize=(8, 6))
-       ax = fig.add_subplot(111, projection='3d')
-       # Scatter plot
-       ax.scatter(tsne_df['Component 1'], tsne_df['Component 2'], tsne_df['Component 3'], c=tsne_df['Labels'], cmap='viridis')
-       ax.set_xlabel('Component 1')
-       ax.set_ylabel('Component 2')
-       ax.set_zlabel('Component 3')
-       plt.title('t-SNE Visualization in 3D')
-       plt.show()        
-
 # import data
 ng20 = fetch_20newsgroups(subset='test')
 corpus = ng20.data[:2000]
@@ -95,11 +77,10 @@ for method in methods:
 
     # Perform clustering
     pred = clust(red_emb, k)
-
+  
     # Evaluate clustering results
     nmi_score = normalized_mutual_info_score(pred, labels)
     ari_score = adjusted_rand_score(pred, labels)
-
     # Print results
     print(f'Method: {method}\nNMI: {nmi_score:.2f} \nARI: {ari_score:.2f}\n')
     
