@@ -8,8 +8,7 @@ def clust(embeddings, k):
 
 def dim_red(embeddings, n_components=20):
     umap_model = UMAP(n_components=n_components, random_state=42)
-    reduced_embeddings = umap_model.fit_transform(embeddings)
-    return reduced_embeddings
+    reduced_embeddings = umap_model.fit_transform(embeddin    return reduced_embeddings
 
 # import data
 ng20 = fetch_20newsgroups(subset='test')
@@ -31,6 +30,4 @@ pred = clust(red_emb, k)
 nmi_score = normalized_mutual_info_score(pred,labels)
 ari_score = adjusted_rand_score(pred,labels)
 accuracy = accuracy_score(labels, pred)
-
-print(f'NMI: {nmi_score:.2f}\nAccuracy: {accuracy:.2f}\nARI: {ari_score:.2f}')
 
