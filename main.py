@@ -34,7 +34,7 @@ def dim_red(mat, p, method):
         red_mat = tsne.fit_transform(mat)
         red_mat = mat[:,:p]
     else:
-        raise Exception("Please select one of the three methods : APC, AFC, UMAP")
+        raise Exception("Please select one of the four methods : APC, AFC, UMAP, TSNE")
     
     return red_mat
 
@@ -58,6 +58,22 @@ def clust(mat, k):
     
     return pred
 
+def plot(labels,red_emb,method):
+    if method=='TSNE':
+       tsne_df = pd.DataFrame(data=red_emb, columns=['Component 1', 'Component 2', 'Component 3'])
+       tsne_df['Labels'] = labels
+
+       # Plotting in 3D
+       fig = plt.figure(figsize=(8, 6))
+       ax = fig.add_subplot(111, projection='3d')
+       # Scatter plot
+       ax.scatter(tsne_df['Component 1'], tsne_df['Component 2'], tsne_df['Component 3'], c=tsne_df['Labels'], cmap='viridis')
+       ax.set_xlabel('Component 1')
+       ax.set_ylabel('Component 2')
+       ax.set_zlabel('Component 3')
+       plt.title('t-SNE Visualization in 3D')
+       plt.show()        
+
 # import data
 ng20 = fetch_20newsgroups(subset='test')
 corpus = ng20.data[:2000]
@@ -72,7 +88,10 @@ embeddings = model.encode(corpus)
 methods = ['ACP', 'AFC', 'UMAP','TSNE']
 for method in methods:
     # Perform dimensionality reduction
-    red_emb = dim_red(embeddings, 20, method)
+    if method=='TSNE':
+        red_emb = dim_red(embeddings, 3, method)
+    else:
+         red_emb = dim_red(embeddings, 20, method)
 
     # Perform clustering
     pred = clust(red_emb, k)
@@ -83,4 +102,4 @@ for method in methods:
 
     # Print results
     print(f'Method: {method}\nNMI: {nmi_score:.2f} \nARI: {ari_score:.2f}\n')
-
+    
