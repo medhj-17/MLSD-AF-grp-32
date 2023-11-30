@@ -18,6 +18,3 @@ L'objectif est de voir quelle combinaison donne les meilleurs résultats :
 |  UMAP + k-means |    0.44   |   0.25    |
 
 
-## Visualisation des résultats :
-![Plot du résultat de clustering avec ACP, t-SNE et UMAP](results.png)
-En exécutant le conteneur, Cette visualisation est sauvegardée dans une image "results.png"
